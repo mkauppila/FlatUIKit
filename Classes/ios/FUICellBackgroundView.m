@@ -23,11 +23,12 @@
 	return NO;
 }
 
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     
     //Determine position
-    UITableView* tableView = (UITableView*)self.superview.superview;
+    UITableView* tableView = [self findContainingTableView];
     NSIndexPath* indexPath = [tableView indexPathForCell:(UITableViewCell*)self.superview];
     
     if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
@@ -44,6 +45,15 @@
     }
     
     self.separatorColor = tableView.separatorColor;
+}
+
+- (UITableView *)findContainingTableView
+{
+    UIView* superView = self.superview;
+    while (superView != nil && [superView isKindOfClass:[UITableView class]] == NO) {
+        superView = superView.superview;
+    }
+    return (UITableView *)superView;
 }
 
 - (void)drawRect:(CGRect)aRect {
